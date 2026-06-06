@@ -18,7 +18,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Navbar = () => {
   const user: any = {
     name: "John Doe",
-    email: "john@exmaple.com",
+    email: "john@example.com",
     isAdmin: true,
   };
   const { cartCount, setIsCartOpen } = {
@@ -29,163 +29,154 @@ const Navbar = () => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleSearch = (e: React.SubmitEvent)=>{
-    e.preventDefault()
-    if(searchQuery.trim()){
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
-      setSearchQuery("")
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
     }
-  }
+  };
 
-  const handleLogout =()=>{
-    setUserMenuOpen(false)
-    navigate("/")
-  }
+  const handleLogout = () => {
+    setUserMenuOpen(false);
+    navigate("/");
+  };
 
   return (
-    <nav className="bg-white sticky top-0 z-50 border-b border-app-border">
+    <nav className="bg-app-cream sticky top-0 z-50 border-b border-app-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 gap-4">
-        <Link
-          to="/"
-          className="flex items-center gap-2 text-[22px] font-medium shrink-0"
-        >
-          <ShoppingBag size={24} /> Cartify
+
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2 shrink-0">
+          <ShoppingBag size={22} className="text-app-green" />
+          <span className="text-[18px] font-semibold text-app-green tracking-tight">Cartify</span>
         </Link>
-        <div className="w-full flex items-center justify-end gap-4 lg:gap-10">
-          {/* Nav Link- Desktop */}
-          <div className="hidden md:flex items-center gap-6 text-sm text-zinc-600">
-            <Link to="/">Home</Link>
-            <Link to="/products">Products</Link>
-            <Link to="/deals" className="text-app-orange">
+
+        <div className="w-full flex items-center justify-end gap-4 lg:gap-8">
+
+          {/* Nav Links */}
+          <div className="hidden md:flex items-center gap-6 text-[13px] font-medium text-app-text-light">
+            <Link to="/" className="hover:text-app-text transition-colors">Home</Link>
+            <Link to="/products" className="hover:text-app-text transition-colors">Products</Link>
+            <Link to="/deals" className="text-app-orange hover:text-app-orange-dark transition-colors">
               Deals
             </Link>
           </div>
+
           {/* Search */}
-          <form onSubmit={handleSearch} className="hidden sm:flex flex-1 max-w-sm text-xs sm:text-sm">
+          <form onSubmit={handleSearch} className="hidden sm:flex flex-1 max-w-xs">
             <div className="relative w-full">
-              <SearchIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-zinc-500" />
+              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-app-text-light/50" />
               <input
                 type="text"
-                placeholder="Search for groceries..."
+                placeholder="Search groceries..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-8 p-2 bg-orange-50 rounded-full ring ring-app-orange/15 focus:ring-app-orange/30"
+                className="w-full pl-9 pr-4 py-2 text-[13px] bg-white border border-app-border rounded-full focus:border-app-green text-app-text placeholder:text-app-text-light/50 transition-colors"
               />
             </div>
           </form>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1">
+
             {/* Cart */}
             <button
-              className="relative p-2 rounded-xl"
               onClick={() => setIsCartOpen(true)}
+              className="relative p-2 rounded-xl hover:bg-app-cream-dark transition-colors"
             >
-              <ShoppingCart className="size-5 text-zinc-900" />
+              <ShoppingCart className="size-[18px] text-app-text" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 size-4 bg-app-orange text-white text-[10px] rounded-full flex-center">
+                <span className="absolute -top-0.5 -right-0.5 size-4 bg-app-orange text-white text-[9px] font-semibold rounded-full flex items-center justify-center">
                   {cartCount}
                 </span>
               )}
             </button>
+
             {/* User */}
             <div className="relative">
               {user ? (
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-2 p-2"
+                  className="flex items-center gap-1.5 pl-1 pr-2 py-1.5 rounded-xl hover:bg-app-cream-dark transition-colors"
                 >
-                  <div className="size-7 rounded-full bg-green-950 text-white flex-center">
+                  <div className="size-7 rounded-full bg-app-green text-white text-[12px] font-medium flex items-center justify-center">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
-                  <ChevronDownIcon className="size-3 text-zinc-500" />
+                  <ChevronDownIcon className="size-3 text-app-text-light" />
                 </button>
               ) : (
-                <div className="flex-center gap-2">
+                <div className="flex items-center gap-2">
                   <Link
                     to="/login"
-                    className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-950 rounded-full hover:bg-green-950-light transition-colors"
+                    className="hidden md:flex items-center gap-1.5 px-4 py-2 text-[13px] font-medium text-white bg-app-green hover:bg-app-green-light rounded-full transition-colors"
                   >
-                    <UserIcon size={16} /> Sign In
+                    <UserIcon size={14} /> Sign In
                   </Link>
-                  {userMenuOpen ? (
-                    <XIcon
-                      className="md:hidden"
-                      onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    />
-                  ) : (
-                    <MenuIcon
-                      className="md:hidden"
-                      onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    />
-                  )}
+                  <button
+                    className="md:hidden p-2 rounded-xl hover:bg-app-cream-dark transition-colors"
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  >
+                    {userMenuOpen
+                      ? <XIcon className="size-5 text-app-text" />
+                      : <MenuIcon className="size-5 text-app-text" />
+                    }
+                  </button>
                 </div>
               )}
+
+              {/* Dropdown */}
               {userMenuOpen && (
                 <>
-                  {/* Overlay */}
-                  <div
-                    className="fixed inset-0 z-40"
-                    onClick={() => setUserMenuOpen(false)}
-                  />
+                  <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
+                  <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.08)] border border-app-border py-1.5 z-50 animate-fade-in">
 
-                  {/* Dropdown */}
-                  <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-app-border py-2 z-50 animate-fade-in">
                     {user && (
-                      <div className="px-4 py-2 border-b border-app-border">
-                        <p className="text-sm font-medium text-zinc-900">
-                          {user.name}
-                        </p>
-                        <p className="text-xs text-zinc-500">{user.email}</p>
+                      <div className="px-4 py-3 border-b border-app-border mb-1">
+                        <p className="text-[13.5px] font-bold text-app-text">{user.name}</p>
+                        <p className="text-[11.5px] text-app-text-light mt-0.5">{user.email}</p>
                       </div>
                     )}
 
                     <div onClick={() => setUserMenuOpen(false)}>
                       {!user && (
-                        <Link to="/login" className="dropdown-link">
-                          <UserIcon size={16} />
-                          Sign In
+                        <Link to="/login" className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-app-text-light hover:bg-app-cream hover:text-app-text transition-colors rounded-lg mx-1">
+                          <UserIcon size={15} className="text-app-text-light" strokeWidth={1.5} /> Sign In
                         </Link>
                       )}
-
                       {user && (
-                        <Link to="/orders" className="dropdown-link">
-                          <PackageIcon size={16} />
-                          My Orders
+                        <Link to="/orders" className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-app-text-light hover:bg-app-cream hover:text-app-text transition-colors rounded-lg mx-1">
+                          <PackageIcon size={15} className="text-app-text-light" strokeWidth={1.5} /> My Orders
                         </Link>
                       )}
-
                       {user && (
-                        <Link to="/addresses" className="dropdown-link">
-                          <MapPinIcon size={16} />
-                          Addresses
+                        <Link to="/addresses" className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-app-text-light hover:bg-app-cream hover:text-app-text transition-colors rounded-lg mx-1">
+                          <MapPinIcon size={15} className="text-app-text-light" strokeWidth={1.5} /> Addresses
                         </Link>
                       )}
-
-                      <Link to="/products" className="dropdown-link md:hidden">
-                        <ArrowUpRightIcon size={16} />
-                        Products
+                      <Link to="/products" className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-app-text-light hover:bg-app-cream hover:text-app-text transition-colors rounded-lg mx-1 md:hidden">
+                        <ArrowUpRightIcon size={15} className="text-app-text-light" strokeWidth={1.5} /> Products
                       </Link>
-
-                      <Link to="/deals" className="dropdown-link md:hidden">
-                        <ArrowUpRightIcon size={16} />
-                        Deals
+                      <Link to="/deals" className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-app-text-light hover:bg-app-cream hover:text-app-text transition-colors rounded-lg mx-1 md:hidden">
+                        <ArrowUpRightIcon size={15} className="text-app-text-light" strokeWidth={1.5} /> Deals
                       </Link>
-
                       {user?.isAdmin && (
-                        <Link to="/admin/products" className="dropdown-link">
-                          <ShieldIcon size={16} />
-                          Admin Panel
+                        <Link to="/admin/products" className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-app-text-light hover:bg-app-cream hover:text-app-text transition-colors rounded-lg mx-1">
+                          <ShieldIcon size={15} className="text-app-text-light" strokeWidth={1.5} /> Admin Panel
                         </Link>
-                      )}
-                      {user && (
-                        <div className="border-t border-app-border pt-1">
-                          <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-2.5 text-sm text-app-error hover:bg-red-50 w-full transition-colors">
-                            <LogOutIcon size={16}/>Logout
-                          </button>
-                        </div>
                       )}
                     </div>
+
+                    {user && (
+                      <div className="border-t border-app-border mt-1 pt-1">
+                        <button
+                          onClick={handleLogout}
+                          className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-app-error hover:bg-red-50 w-full transition-colors rounded-lg mx-1 font-medium"
+                        >
+                          <LogOutIcon size={15} strokeWidth={1.5} /> Logout
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </>
               )}
