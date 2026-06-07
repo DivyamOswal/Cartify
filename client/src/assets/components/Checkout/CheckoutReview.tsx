@@ -26,7 +26,7 @@ export default function CheckoutReview({ address, items, handlePlaceOrder, loadi
                     <span className="text-sm font-semibold text-app-green">Delivery Address</span>
                 </div>
                 <p className="text-sm text-app-text-light">
-                    {address.label} — {address.address}, {address.city}, {address.state} {address.zip}
+                    {address.label} - {address.address}, {address.city}, {address.state} {address.zip}
                 </p>
             </div>
 
@@ -45,7 +45,7 @@ export default function CheckoutReview({ address, items, handlePlaceOrder, loadi
             </div>
 
             <button onClick={handlePlaceOrder} disabled={loading} className="w-full py-3 bg-app-orange text-white font-semibold rounded-xl hover:bg-app-orange-dark transition-colors disabled:opacity-60 active:scale-[0.98]">
-                {loading ? "Placing Order..." : `Place Order — ${currency}${total.toFixed(2)}`}
+                {loading ? "Placing Order..." : `Place Order - ${currency}${total.toFixed(2)}`}
             </button>
         </div>
     )
