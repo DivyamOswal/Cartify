@@ -108,7 +108,7 @@ const Footer = () => {
                 return (
                   <li key={i} className="flex items-start gap-2.5">
                     <div className="size-6 rounded-md bg-white/8 border border-white/10 flex items-center justify-center shrink-0 mt-0.5">
-                      <Icon className="size-3 text-app-green-accent" />
+                      <Icon className="size-3 text-white/60" />
                     </div>
                     <span className="text-[13px] text-white/60 leading-snug">
                       {item.text}
