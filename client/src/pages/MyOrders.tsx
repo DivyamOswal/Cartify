@@ -1,95 +1,181 @@
 import { useEffect, useState } from "react"
 import type { Order } from "../types"
 import { Link, useSearchParams } from "react-router-dom"
-import { useCart } from "../context/CardContext"
 import { dummyDashboardOrdersData, statusColors } from "../assets/assets"
 import Loading from "../components/Loading"
-import { CalendarIcon, ChevronRightIcon, PackageIcon } from "lucide-react"
-
+import { CalendarIcon, ChevronRightIcon, PackageIcon, ShoppingBagIcon } from "lucide-react"
+import { useCart } from "../context/CardContext"
 
 const MyOrders = () => {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "₹"
-
-  const [order, setOrders] = useState<Order[]>([])
+  const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("all")
   const [searchParams, setSearchParams] = useSearchParams()
+  const { clearCart } = useCart()
 
-  const tabs = ["all", "Placed", "Out for Delivery", "Delivered"]
+  const tabs = [
+    { key: "all",              label: "All Orders"       },
+    { key: "Placed",           label: "Placed"           },
+    { key: "Out for Delivery", label: "Out for Delivery" },
+    { key: "Delivered",        label: "Delivered"        },
+  ]
 
-  const {clearCart} = useCart()
-
-  const fetchOrders = async ()=>{
+  const fetchOrders = async () => {
     setOrders(dummyDashboardOrdersData as any)
     setLoading(false)
   }
 
-  useEffect(()=>{
-    if(searchParams.get("clearCart")){
+  useEffect(() => {
+    setLoading(true)
+    if (searchParams.get("clearCart")) {
       clearCart()
       setSearchParams({})
-      setTimeout(()=>{
-        fetchOrders()
-      }, 2000)
-    }else{
+      setTimeout(() => fetchOrders(), 1000)
+    } else {
       fetchOrders()
     }
-    setLoading(false)
   }, [activeTab])
 
+  // Filter orders by active tab
+  const filteredOrders = activeTab === "all"
+    ? orders
+    : orders.filter((o) => o.status === activeTab)
+
   return (
-    <div className="min-h-screen bg-app-cream mb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {tabs.map((tab)=>(
-          <button key={tab} onClick={()=>setActiveTab(tab)} className={`px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-colors ${activeTab === tab ? "bg-app-green text-white" : "bg-white text-app-text-light hover:bg-app-cream"}`}>
-            {tab === "all" ? "All Orders" : tab}
-          </button>
-        ))}
-      </div>
-      {/* Orders List */}
-      {loading ? (<Loading/>):order.length === 0 ? (
-        <div className="text-center py-16">
-          <PackageIcon className="size-16 text-app-border mx-auto mb-4"/>
-          <h2 className="text-lg font-medium text-app-green mb-2">No orders yet</h2>
-          <p className="text-sm text-app-text-light mb-4">Start shopping to see your orders here</p>
-          <Link to='/products' className="inline-flex px-4 py-2 bg-app-green text-white text-sm rounded-lg">Start Shopping</Link>
+    <div className="min-h-screen bg-app-cream">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        {/* Header */}
+        <div className="mb-6">
+          <p className="text-[11px] font-semibold text-app-green-accent tracking-widest uppercase mb-1.5">
+            Account
+          </p>
+          <h1 className="font-serif text-2xl sm:text-3xl text-app-text leading-tight">
+            My Orders
+          </h1>
+          <p className="text-[13px] text-app-text-light mt-1 font-light">
+            {orders.length} order{orders.length !== 1 ? "s" : ""} placed
+          </p>
         </div>
-      ):(
-        <div className="space-y-4">
-          {order.map((order)=>(
-            <Link key={order._id} to={`/orders/${order._id}`} className="block max-w-4xl bg-white rounded-2xl p-5 hover:shadow transition-all">
-              {/* orders id , date & status */}
-              <div className="flex items-start justify-between mb-3">
-                {/* left */}
-                <div>
-                  <p className="text-sm font-medium text-app-green">Order # {order._id.slice(-8).toUpperCase()}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <CalendarIcon className="size-3 text-app-text-light"/>
-                  <span className="text-xs text-app-text-light">{new Date(order.createdAt).toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"})}</span>
-                  </div>
-                </div>
-                {/* right */}
-                <div className="flex items-center gap-2">
-                  <span className={`px-4 py-1 text-xs font-medium rounded-full ${statusColors[order.status] || "bg-gray-100 text-gray-700"}`}>{order.status}</span>
-                  <ChevronRightIcon className="size-4 text-app-text-light"/>
-                </div>
-              </div>
-              {/* Item thumbnails */}
-              <div className="flex items-center gap-2 mb-3">
-                {order.items.slice(0,4).map((item, i)=>(
-                  <img src={item.image} key={i} alt={item.name} className="size-12 sm:size-16 rounded-lg object-cover border border-app-border" />
-                ))}
-                {order.items.length > 4 && <div className="size-12 sm:size016 rounded-lg bg-app-cream flex-ceter text-xs font-semibold text-app-text-light">+{order.items.length}</div>}
-              </div>
-              {/* toatal items & price */}
-              <div className="flex justify-between items-center pt-3 text-sm">
-                <span className="text-app-text-light">{order.items.length} items</span>
-                <span className="font-semibold text-app-green">{currency}{order.total.toFixed(2)}</span>
-              </div>
-            </Link>
+
+        {/* Tabs */}
+        <div className="flex items-center gap-1.5 flex-wrap mb-6">
+          {tabs.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`px-4 py-2 text-[13px] font-medium rounded-xl whitespace-nowrap transition-all
+                ${activeTab === tab.key
+                  ? "bg-app-green text-white shadow-sm"
+                  : "bg-white border border-app-border text-app-text-muted hover:bg-app-cream"
+                }`}
+            >
+              {tab.label}
+            </button>
           ))}
         </div>
-      )}
+
+        {/* Content */}
+        {loading ? (
+          <Loading />
+        ) : filteredOrders.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-24 text-center">
+            <div className="size-16 rounded-2xl bg-white border border-app-border flex items-center justify-center mb-4 shadow-sm">
+              <PackageIcon className="size-7 text-app-text-faint" strokeWidth={1.5} />
+            </div>
+            <h3 className="font-serif text-xl text-app-text mb-2">
+              {activeTab === "all" ? "No orders yet" : `No ${activeTab.toLowerCase()} orders`}
+            </h3>
+            <p className="text-[13px] text-app-text-light font-light mb-6">
+              {activeTab === "all"
+                ? "Start shopping to see your orders here"
+                : "Check back later or view all orders"
+              }
+            </p>
+            <Link
+              to="/products"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-app-green hover:bg-app-green-lighter text-white text-[13px] font-semibold rounded-xl transition-colors"
+            >
+              <ShoppingBagIcon className="size-3.5" />
+              Start Shopping
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {filteredOrders.map((order) => (
+              <Link
+                key={order._id}
+                to={`/orders/${order._id}`}
+                className="flex flex-col bg-white border border-app-border rounded-2xl p-5 hover:border-app-cream-darker hover:shadow-[0_2px_12px_rgba(26,46,26,0.06)] transition-all"
+              >
+                {/* Top row — order ID, date, status */}
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <p className="text-[13px] font-bold text-app-text">
+                      #{order._id.slice(-8).toUpperCase()}
+                    </p>
+                    <div className="flex items-center gap-1.5 mt-1">
+                      <CalendarIcon className="size-3 text-app-text-faint" />
+                      <span className="text-[11.5px] text-app-text-faint">
+                        {new Date(order.createdAt).toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`px-3 py-1 text-[11px] font-semibold rounded-full ${
+                        statusColors[order.status] || "bg-gray-100 text-gray-600"
+                      }`}
+                    >
+                      {order.status}
+                    </span>
+                    <ChevronRightIcon className="size-4 text-app-text-faint" />
+                  </div>
+                </div>
+
+                {/* Item thumbnails */}
+                <div className="flex items-center gap-2 mb-4">
+                  {order.items.slice(0, 4).map((item, i) => (
+                    <div
+                      key={i}
+                      className="size-12 sm:size-14 rounded-xl bg-app-cream border border-app-border overflow-hidden flex items-center justify-center shrink-0"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-contain p-1"
+                      />
+                    </div>
+                  ))}
+                  {order.items.length > 4 && (
+                    <div className="size-12 sm:size-14 rounded-xl bg-app-cream border border-app-border flex items-center justify-center shrink-0">
+                      <span className="text-[11px] font-semibold text-app-text-muted">
+                        +{order.items.length - 4}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Bottom row — items count + total */}
+                <div className="flex items-center justify-between pt-3 border-t border-app-border">
+                  <span className="text-[12.5px] text-app-text-muted">
+                    {order.items.length} item{order.items.length !== 1 ? "s" : ""}
+                  </span>
+                  <span className="text-[14px] font-bold text-app-text">
+                    {currency}{order.total.toFixed(0)}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+
+      </div>
     </div>
   )
 }
