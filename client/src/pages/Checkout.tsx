@@ -107,7 +107,27 @@ const Checkout = () => {
           </div>
 
           {/* Order Summary Sidebar */}
-          <div className=''></div>
+          <div className='bg-white  rounded-2xl p-5 h-fit sticky top-24 '>
+            <h3 className='text-sm font-semibold text-app-green mb-4'>Order Summary</h3>
+            <div className='space-y-2 text-sm'>
+              <div className='flex justify-between'>
+                <span className='text-app-text-light'>Subtotal ({items.length} items)</span>
+                <span>{currency}{cartTotal.toFixed(2)}</span>
+              </div>
+              <div className='flex justify-between'>
+                <span className='text-app-text-light'>Delivery</span>
+                <span>{deliveryFee === 0 ? <span className='text-app-success'>Free</span>: `${currency}${deliveryFee.toFixed(2)}`}</span>
+              </div>
+              <div className='flex justify-between'>
+                <span className='text-app-text-light'>Tax</span>
+                <span>{currency}{tax.toFixed(2)}</span>
+              </div>
+              <div className='flex justify-between pt-3 border-t border-app-border text-base font-semibold'>
+                <span>Total</span>
+                <span className='text-app-green'>{currency}{total.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

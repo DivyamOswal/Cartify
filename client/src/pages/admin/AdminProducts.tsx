@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { PlusIcon, EditIcon, XIcon } from "lucide-react";
-import type { Product } from "../../types";
+import type { Product } from "../../assets/types";
 import Loading from "../../components/Loading";
 import { dummyProducts } from "../../assets/assets";
 
