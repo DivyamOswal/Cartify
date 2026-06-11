@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import type { Product } from "../types";
 import { StarIcon, ThumbsUpIcon } from "lucide-react";
 
-/* ─── Dummy Reviews Section ─── */
+/* -─ Dummy Reviews Section -─ */
 const REVIEWERS = [
     { name: "Ananya S.", avatar: "AS" },
     { name: "Rahul M.", avatar: "RM" },

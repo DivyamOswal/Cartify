@@ -1,94 +1,180 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { PlusIcon, EditIcon, XIcon } from "lucide-react";
-import type { Product } from "../../assets/types";
-import Loading from "../../components/Loading";
-import { dummyProducts } from "../../assets/assets";
+import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
+import { EditIcon, LeafIcon, PackageIcon, PlusIcon, XIcon } from "lucide-react"
+import type { Product } from "../../assets/types"
+import Loading from "../../components/Loading"
+import { dummyProducts } from "../../assets/assets"
 
 export default function AdminProducts() {
+  const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "₹"
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
 
-    const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
+  useEffect(() => {
+    setProducts(dummyProducts)
+    setTimeout(() => setLoading(false), 1000)
+  }, [])
 
-    const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState(true);
+  const handleMarkOutOfStock = async (id: string, name: string) => {
+    if (!window.confirm(`Mark "${name}" as out of stock?`)) return
+    console.log(id)
+  }
 
-    const fetchProducts = async () => {
-        setProducts(dummyProducts);
-        setTimeout(() => {
-            setLoading(false);
-        }, 1000);
-    };
+  if (loading) return <Loading />
 
-    useEffect(() => {
-        fetchProducts();
-    }, []);
+  const inStock    = products.filter((p) => p.stock > 0).length
+  const outOfStock = products.length - inStock
 
-    const handleMarkOutOfStock = async (id: string, name: string) => {
-        if (!window.confirm(`Are you sure you want to mark "${name}" as out of stock?`)) return;
-        console.log(id);
-    };
+  return (
+    <div className="space-y-6">
 
-    if (loading) return <Loading />
+      {/* Page header */}
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-[11px] font-semibold text-app-green-accent tracking-widest uppercase mb-1">
+            Admin
+          </p>
+          <h1 className="font-serif text-2xl sm:text-3xl text-app-text leading-tight">
+            Products
+          </h1>
+          <p className="text-[13px] text-app-text-light mt-1 font-light">
+            {inStock} in stock
+            {outOfStock > 0 && (
+              <span className="text-app-error ml-1.5">· {outOfStock} out of stock</span>
+            )}
+          </p>
+        </div>
+        <Link
+          to="/admin/products/new"
+          className="shrink-0 flex items-center gap-1.5 px-4 py-2.5 bg-app-green hover:bg-app-green-lighter text-white text-[13px] font-semibold rounded-xl transition-colors active:scale-[0.98]"
+        >
+          <PlusIcon className="size-3.5" strokeWidth={2.5} />
+          Add Product
+        </Link>
+      </div>
 
-    return (
-        <>
-            <div className="bg-white rounded-2xl shadow-sm border border-app-border overflow-hidden">
-                <div className="px-6 py-5 border-b border-app-border flex items-center justify-between gap-4 flex-wrap">
-                    <h2 className="text-xl font-semibold text-zinc-900">Products</h2>
-                    <Link to="/admin/products/new" className="flex items-center gap-2 px-4 py-2 bg-app-green text-white rounded-xl hover:bg-green-950 transition-colors font-medium text-sm">
-                        <PlusIcon className="size-4" /> Add Product
-                    </Link>
-                </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm whitespace-nowrap">
-                        <thead className="bg-app-cream/50 text-zinc-500 uppercase text-xs font-semibold">
-                            <tr>
-                                <th className="px-6 py-4">Product</th>
-                                <th className="px-6 py-4">Price</th>
-                                <th className="px-6 py-4">Stock</th>
-                                <th className="px-6 py-4 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-app-border">
-                            {products.length === 0 ? (
-                                <tr>
-                                    <td colSpan={4} className="px-6 py-8 text-center text-zinc-500">No products found.</td>
-                                </tr>
-                            ) : (
-                                products.map(product => (
-                                    <tr key={product._id} className="hover:bg-zinc-50/50 transition-colors">
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center gap-3">
-                                                <img src={product.image} alt={product.name} className="size-12 rounded-lg object-cover" />
-                                                <div>
-                                                    <p className="font-semibold text-zinc-900">{product.name}</p>
-                                                    <p className="text-xs text-zinc-500">{product.category || "Uncategorized"}</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 font-medium">{currency}{product.price.toFixed(2)}</td>
-                                        <td className="px-6 py-4">
-                                            <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${product.stock > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-                                                {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 text-right">
-                                            <div className="flex items-center justify-end gap-2">
-                                                <Link to={`/admin/products/${product._id}/edit`} className="p-2 text-zinc-500 hover:text-app-orange bg-zinc-100 hover:bg-orange-50 rounded-lg transition-colors">
-                                                    <EditIcon className="size-4" />
-                                                </Link>
-                                                <button onClick={() => handleMarkOutOfStock(product._id, product.name)} title="Mark Out of Stock" className="p-2 text-zinc-500 hover:text-red-600 bg-zinc-100 hover:bg-red-50 rounded-lg transition-colors">
-                                                    <XIcon className="size-4" />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </>
-    );
+      {/* Table card */}
+      <div className="bg-white border border-app-border rounded-2xl overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left whitespace-nowrap">
+
+            <thead>
+              <tr className="bg-app-cream/60 border-b border-app-border">
+                {["Product", "Category", "Price", "Stock", "Actions"].map((h) => (
+                  <th
+                    key={h}
+                    className={`px-5 py-3 text-[10px] font-bold text-app-text-light uppercase tracking-widest ${h === "Actions" ? "text-right" : ""}`}
+                  >
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+
+            <tbody className="divide-y divide-app-border">
+              {products.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-6 py-16 text-center">
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="size-12 rounded-2xl bg-app-cream border border-app-border flex items-center justify-center">
+                        <PackageIcon className="size-5 text-app-text-faint" strokeWidth={1.5} />
+                      </div>
+                      <p className="text-[13px] text-app-text-faint font-light">No products yet</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                products.map((product) => (
+                  <tr
+                    key={product._id}
+                    className="hover:bg-app-cream/30 transition-colors"
+                  >
+
+                    {/* Product */}
+                    <td className="px-5 py-3.5">
+                      <div className="flex items-center gap-3">
+                        <div className="size-11 rounded-xl bg-app-cream border border-app-border flex items-center justify-center shrink-0 overflow-hidden">
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-full h-full object-contain p-1"
+                          />
+                        </div>
+                        <div>
+                          <p className="text-[13px] font-semibold text-app-text leading-tight">
+                            {product.name}
+                          </p>
+                          {product.isOrganic && (
+                            <span className="inline-flex items-center gap-0.5 text-[9.5px] font-bold text-[#3b6d11]">
+                              <LeafIcon className="size-2.5" strokeWidth={2} /> Organic
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Category */}
+                    <td className="px-5 py-3.5">
+                      <span className="text-[12px] text-app-text-muted capitalize">
+                        {product.category || "Uncategorized"}
+                      </span>
+                    </td>
+
+                    {/* Price */}
+                    <td className="px-5 py-3.5">
+                      <div>
+                        <span className="text-[13px] font-bold text-app-text">
+                          {currency}{product.price.toFixed(0)}
+                        </span>
+                        {product.originalPrice && product.originalPrice > product.price && (
+                          <p className="text-[11px] text-app-text-faint line-through">
+                            {currency}{product.originalPrice.toFixed(0)}
+                          </p>
+                        )}
+                      </div>
+                    </td>
+
+                    {/* Stock */}
+                    <td className="px-5 py-3.5">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10.5px] font-bold border ${
+                        product.stock > 10
+                          ? "bg-green-50 text-green-700 border-green-200"
+                          : product.stock > 0
+                          ? "bg-orange-50 text-app-orange border-orange-200"
+                          : "bg-red-50 text-app-error border-red-200"
+                      }`}>
+                        {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
+                      </span>
+                    </td>
+
+                    {/* Actions */}
+                    <td className="px-5 py-3.5">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <Link
+                          to={`/admin/products/${product._id}/edit`}
+                          className="size-8 flex items-center justify-center rounded-xl text-app-text-faint hover:text-app-green hover:bg-app-cream border border-transparent hover:border-app-border transition-all"
+                          title="Edit product"
+                        >
+                          <EditIcon className="size-3.5" strokeWidth={1.75} />
+                        </Link>
+                        <button
+                          onClick={() => handleMarkOutOfStock(product._id, product.name)}
+                          title="Mark out of stock"
+                          className="size-8 flex items-center justify-center rounded-xl text-app-text-faint hover:text-app-error hover:bg-red-50 border border-transparent hover:border-red-200 transition-all"
+                        >
+                          <XIcon className="size-3.5" strokeWidth={2} />
+                        </button>
+                      </div>
+                    </td>
+
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  )
 }
