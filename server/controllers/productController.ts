@@ -10,7 +10,7 @@ export const getFlashDeals = async (req:Request, res: Response)=>{
     })
 
     const productWithDiscount = products.map((p : any)=>{
-        const discount = p.originalPrice && p.proce ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0
+        const discount = p.originalPrice && p.price ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0
         return {...p, discount}
     })
     res.json({products: productWithDiscount.slice(0, 8)})
@@ -31,7 +31,7 @@ export const getProducts = async(req: Request, res:Response)=>{
 
     const orderBy: any = {}
     if(sort === "price-low") orderBy.price = 'asc'
-    else if(sort === "price-high") orderBy.price = 'asc'
+    else if(sort === "price-high") orderBy.price = 'desc'
     else orderBy.createdAt = 'desc'
 
     const products = await prisma.product.findMany({where, orderBy})
