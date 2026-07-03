@@ -1,6 +1,7 @@
 import { cron, Inngest } from "inngest";
 import { prisma } from "../config/db.js";
 import sendEmail from "../config/nodemailer.js";
+import { timeStamp } from "node:console";
 
 
 const LOW_STOCK_THRESHOLD = 10
@@ -192,7 +193,33 @@ const autoAssignRider = inngest.createFunction({
         })
 
         if(!availableRider) return {skipped: true, reason: "No riders available"}
+        // Generate 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString()
+
+        const history = (Array.isArray(order.statusHistory)? order.statusHistory: []) as any[]
+        history.push({
+            status: "Assigned",
+            note: `Auto-assigned to ${availableRider.name}`,
+            timeStamp: new Date(),
+        })
+
+        await prisma.order.update({
+            where: {id: orderId},
+            data: {
+                deliveryPartnerId: availableRider.id,
+                deliveryOtp: otp,
+                status: "Assigned",
+                statusHistory: history
+            }
+        })
+        return {
+            assigned: true,
+            riderId: availableRider.id,
+            riderName: availableRider.name,
+            orderId: orderId
+        }
     })
+    return result
 })
 
-export const functions = [checkLowStock, sendMonthlyOffers];
+export const functions = [checkLowStock, sendMonthlyOffers, autoAssignRider];
