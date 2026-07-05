@@ -91,12 +91,12 @@ export default function AdminOrders() {
                   </tr>
                 ) : (
                   orders.map((order: any) => (
-                    <tr key={order._id} className="hover:bg-app-cream/30 transition-colors">
+                    <tr key={order.id} className="hover:bg-app-cream/30 transition-colors">
 
                       {/* Order ID + date */}
                       <td className="px-5 py-3.5">
                         <p className="text-[12.5px] font-bold font-mono text-app-text-muted tracking-wide">
-                          #{order._id.slice(-6).toUpperCase()}
+                          #{order.id.slice(-6).toUpperCase()}
                         </p>
                         <p className="text-[11px] text-app-text-faint mt-0.5">
                           {new Date(order.createdAt).toLocaleDateString("en-IN", {
@@ -151,7 +151,7 @@ export default function AdminOrders() {
                           </div>
                         ) : (
                           <button
-                            onClick={() => { setAssignModal(order._id); setSelectedPartner("") }}
+                            onClick={() => { setAssignModal(order.id); setSelectedPartner("") }}
                             className="flex items-center gap-1.5 px-3 py-1.5 text-[11.5px] font-semibold bg-app-green hover:bg-app-green-lighter text-white rounded-lg transition-colors"
                           >
                             <TruckIcon className="size-3" strokeWidth={2} />
@@ -164,7 +164,7 @@ export default function AdminOrders() {
                       <td className="px-5 py-3.5">
                         <select
                           value={order.status}
-                          onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                          onChange={(e) => handleStatusChange(order.id, e.target.value)}
                           className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border-r-8 border-transparent outline-none cursor-pointer leading-tight ${
                             statusColors[order.status] ?? "bg-gray-100 text-gray-600"
                           }`}
@@ -233,10 +233,10 @@ export default function AdminOrders() {
                 ) : (
                   <div className="space-y-2 max-h-56 overflow-y-auto no-scrollbar">
                     {partners.map((p) => {
-                      const selected = selectedPartner === p._id
+                      const selected = selectedPartner === p.id
                       return (
                         <label
-                          key={p._id}
+                          key={p.id}
                           className={`flex items-center gap-3 p-3 rounded-xl border-[1.5px] cursor-pointer transition-all
                             ${selected
                               ? "border-app-green bg-[#86c75a]/5 shadow-[0_0_0_1px_rgba(45,74,45,0.08)]"
@@ -246,9 +246,9 @@ export default function AdminOrders() {
                           <input
                             type="radio"
                             name="partner"
-                            value={p._id}
+                            value={p.id}
                             checked={selected}
-                            onChange={() => setSelectedPartner(p._id)}
+                            onChange={() => setSelectedPartner(p.id)}
                             className="sr-only"
                           />
                           <div className="size-8 rounded-[8px] bg-app-green-light flex items-center justify-center shrink-0">

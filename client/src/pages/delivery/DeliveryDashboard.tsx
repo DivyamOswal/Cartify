@@ -148,7 +148,7 @@ export default function DeliveryDashboard() {
         <div className="space-y-3">
           {displayOrders.map((order) => (
             <DeliveryOrderCard
-              key={order._id}
+              key={order.id}
               order={order}
               tab={tab}
               handleUpdateStatus={handleUpdateStatus}

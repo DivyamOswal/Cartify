@@ -86,7 +86,7 @@ export default function AdminProducts() {
               ) : (
                 products.map((product) => (
                   <tr
-                    key={product._id}
+                    key={product.id}
                     className="hover:bg-app-cream/30 transition-colors"
                   >
 
@@ -151,14 +151,14 @@ export default function AdminProducts() {
                     <td className="px-5 py-3.5">
                       <div className="flex items-center justify-end gap-1.5">
                         <Link
-                          to={`/admin/products/${product._id}/edit`}
+                          to={`/admin/products/${product.id}/edit`}
                           className="size-8 flex items-center justify-center rounded-xl text-app-text-faint hover:text-app-green hover:bg-app-cream border border-transparent hover:border-app-border transition-all"
                           title="Edit product"
                         >
                           <EditIcon className="size-3.5" strokeWidth={1.75} />
                         </Link>
                         <button
-                          onClick={() => handleMarkOutOfStock(product._id, product.name)}
+                          onClick={() => handleMarkOutOfStock(product.id, product.name)}
                           title="Mark out of stock"
                           className="size-8 flex items-center justify-center rounded-xl text-app-text-faint hover:text-app-error hover:bg-red-50 border border-transparent hover:border-red-200 transition-all"
                         >

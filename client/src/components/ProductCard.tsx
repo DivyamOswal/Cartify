@@ -27,7 +27,7 @@ const ProductCard = ({ product }: Props) => {
 
   return (
     <div
-      onClick={() => !isOutOfStock && navigate(`/products/${product._id}`)}
+      onClick={() => !isOutOfStock && navigate(`/products/${product.id}`)}
       className={`bg-white border border-app-border rounded-2xl overflow-hidden transition-all duration-200 group flex flex-col animate-fade-in
         ${isOutOfStock ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:border-app-cream-darker hover:shadow-[0_6px_24px_rgba(26,46,26,0.09)]"}`}
     >

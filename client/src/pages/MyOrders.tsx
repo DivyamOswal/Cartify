@@ -105,15 +105,15 @@ const MyOrders = () => {
           <div className="space-y-3">
             {filteredOrders.map((order) => (
               <Link
-                key={order._id}
-                to={`/orders/${order._id}`}
+                key={order.id}
+                to={`/orders/${order.id}`}
                 className="flex flex-col bg-white border border-app-border rounded-2xl p-5 hover:border-app-cream-darker hover:shadow-[0_2px_12px_rgba(26,46,26,0.06)] transition-all"
               >
                 {/* Top row — order ID, date, status */}
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <p className="text-[13px] font-bold text-app-text">
-                      #{order._id.slice(-8).toUpperCase()}
+                      #{order.id.slice(-8).toUpperCase()}
                     </p>
                     <div className="flex items-center gap-1.5 mt-1">
                       <CalendarIcon className="size-3 text-app-text-faint" />

@@ -63,7 +63,7 @@ const AddressCard = ({ addr, onEditHandler, setAddresses }: AddressCardProps) =>
           <PencilIcon className="size-3.5" strokeWidth={1.75} />
         </button>
         <button
-          onClick={() => handleDelete(addr._id)}
+          onClick={() => handleDelete(addr.id)}
           className="size-8 flex items-center justify-center rounded-xl text-app-text-faint hover:text-app-error hover:bg-red-50 transition-colors"
           aria-label="Delete address"
         >

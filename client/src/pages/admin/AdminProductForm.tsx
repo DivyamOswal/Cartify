@@ -29,7 +29,7 @@ export default function AdminProductForm() {
 
   useEffect(() => {
     if (isEdit) {
-      const found = dummyProducts.find((p) => p._id === id)
+      const found = dummyProducts.find((p) => p.id === id)
       if (found) setFormData(found as any)
     }
     setLoading(false)

@@ -155,13 +155,13 @@ export default function AdminDashboard() {
               ) : (
                 stats.recentOrders.map((order: any) => (
                   <tr
-                    key={order._id}
+                    key={order.id}
                     className="hover:bg-app-cream/40 transition-colors"
                   >
                     {/* Order ID */}
                     <td className="px-5 py-3.5">
                       <span className="text-[12px] font-bold font-mono text-app-text-muted tracking-wide">
-                        #{order._id.slice(-6).toUpperCase()}
+                        #{order.id.slice(-6).toUpperCase()}
                       </span>
                     </td>
 

@@ -43,7 +43,7 @@ export default function DeliveryOrderCard({
       <div className="flex items-center justify-between px-5 py-3.5 border-b border-app-border bg-app-cream/50">
         <div className="flex items-center gap-2.5">
           <span className="text-[12px] font-bold text-app-text-muted font-mono tracking-wide">
-            #{order._id.slice(-6).toUpperCase()}
+            #{order.id.slice(-6).toUpperCase()}
           </span>
           <span className={`px-2.5 py-0.5 text-[10.5px] font-bold rounded-full ${
             statusColors[order.status] ?? "bg-gray-100 text-gray-600"
@@ -120,7 +120,7 @@ export default function DeliveryOrderCard({
           {/* Progress action */}
           {nextStatus && (
             <button
-              onClick={() => handleUpdateStatus(order._id, nextStatus)}
+              onClick={() => handleUpdateStatus(order.id, nextStatus)}
               className="flex items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold bg-app-green hover:bg-app-green-lighter text-white rounded-xl transition-colors active:scale-[0.98]"
             >
               <TruckIcon className="size-3.5" strokeWidth={2} />
@@ -131,7 +131,7 @@ export default function DeliveryOrderCard({
           {/* Deliver — OTP */}
           {order.status === "Out for Delivery" && (
             <button
-              onClick={() => setOtpModal(order._id)}
+              onClick={() => setOtpModal(order.id)}
               className="flex items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold bg-green-600 hover:bg-green-700 text-white rounded-xl transition-colors active:scale-[0.98]"
             >
               <CheckCircleIcon className="size-3.5" strokeWidth={2} />
@@ -141,7 +141,7 @@ export default function DeliveryOrderCard({
 
           {/* Cancel */}
           <button
-            onClick={() => setCancelModal(order._id)}
+            onClick={() => setCancelModal(order.id)}
             className="flex items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold text-app-error bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition-colors"
           >
             <XCircleIcon className="size-3.5" strokeWidth={2} />

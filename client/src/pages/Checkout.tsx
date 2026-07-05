@@ -32,7 +32,7 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("card")
 
   const [address, setAddress] = useState<Address>({
-    _id: "", label: "Home", address: "", city: "",
+    id: "", label: "Home", address: "", city: "",
     state: "", zip: "", isDefault: false, lat: 0, lng: 0,
   })
 
@@ -41,7 +41,7 @@ const Checkout = () => {
     if (user?.addresses?.length) {
       const def = user.addresses.find((a) => a.isDefault) ?? user.addresses[0]
       setAddress({
-        _id:       def._id,
+        id:       def.id,
         label:     def.label,
         address:   def.address,
         city:      def.city,
@@ -182,7 +182,7 @@ const Checkout = () => {
             <div className="flex flex-wrap gap-1.5 mb-4">
               {items.slice(0, 5).map((item) => (
                 <div
-                  key={item.product._id}
+                  key={item.product.id}
                   className="size-10 rounded-lg bg-app-cream border border-app-border overflow-hidden flex items-center justify-center"
                 >
                   <img

@@ -74,7 +74,7 @@ export default function CheckoutReview({
           <div className="space-y-2.5">
             {items.map((item) => (
               <div
-                key={item.product._id}
+                key={item.product.id}
                 className="flex items-center gap-3 p-3 bg-app-cream rounded-xl border border-app-border"
               >
                 {/* Image */}

@@ -38,11 +38,11 @@ const ProductPage = () => {
     setLocalQuantity(1)
     setActiveTab("Description")
     window.scrollTo(0, 0)
-    const found = dummyProducts.find((p) => p._id === id)
+    const found = dummyProducts.find((p) => p.id === id)
     setProduct(found ?? null)
     setRelatedProducts(
       dummyProducts
-        .filter((p) => p._id !== id && p.category === found?.category)
+        .filter((p) => p.id !== id && p.category === found?.category)
         .slice(0, 4)
     )
     setLoading(false)
@@ -60,7 +60,7 @@ const ProductPage = () => {
     </div>
   )
 
-  const cartItem = items.find((item) => item.product._id === product._id)
+  const cartItem = items.find((item) => item.product.id === product.id)
   const inCart = !!cartItem
   const displayQuantity = inCart ? cartItem.quantity : localQuantity
 
@@ -72,21 +72,21 @@ const ProductPage = () => {
   const categoryLabel = product.category.replace(/-/g, " ")
 
   const handleAdd = () => {
-    if (inCart) updateQuantity(product._id, cartItem.quantity + 1)
+    if (inCart) updateQuantity(product.id, cartItem.quantity + 1)
     else addToCart(product, localQuantity)
   }
 
   const handleMinus = () => {
     if (inCart) {
-      if (cartItem.quantity <= 1) removeFromCart(product._id)
-      else updateQuantity(product._id, cartItem.quantity - 1)
+      if (cartItem.quantity <= 1) removeFromCart(product.id)
+      else updateQuantity(product.id, cartItem.quantity - 1)
     } else {
       setLocalQuantity((q) => Math.max(1, q - 1))
     }
   }
 
   const handlePlus = () => {
-    if (inCart) updateQuantity(product._id, cartItem.quantity + 1)
+    if (inCart) updateQuantity(product.id, cartItem.quantity + 1)
     else setLocalQuantity((q) => q + 1)
   }
 
@@ -314,7 +314,7 @@ const ProductPage = () => {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 xl:gap-4">
               {relatedProducts.map((p) => (
-                <ProductCard key={p._id} product={p} />
+                <ProductCard key={p.id} product={p} />
               ))}
             </div>
           </div>

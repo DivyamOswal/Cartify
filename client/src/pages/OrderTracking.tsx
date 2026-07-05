@@ -31,7 +31,7 @@ const OrderTracking = () => {
 
   useEffect(() => {
     setLoading(true)
-    const found = dummyDashboardOrdersData.find((o) => o._id === id)
+    const found = dummyDashboardOrdersData.find((o) => o.id === id)
     setOrder((found as any) ?? null)
     setLoading(false)
   }, [id])
@@ -69,7 +69,7 @@ const OrderTracking = () => {
               Order Tracking
             </p>
             <h1 className="font-serif text-2xl sm:text-3xl text-app-text leading-tight">
-              #{order._id.slice(-8).toUpperCase()}
+              #{order.id.slice(-8).toUpperCase()}
             </h1>
             <p className="text-[13px] text-app-text-light mt-1 font-light">
               Placed on{" "}

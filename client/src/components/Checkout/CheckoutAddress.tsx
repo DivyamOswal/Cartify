@@ -37,7 +37,7 @@ const CheckoutAddress = ({ user, address, setAddress, setStep }: any) => {
                 const selected = isSelected(addr)
                 return (
                   <div
-                    key={addr._id || addr.label}
+                    key={addr.id || addr.label}
                     onClick={() => setAddress({
                       label:   addr.label,
                       address: addr.address,

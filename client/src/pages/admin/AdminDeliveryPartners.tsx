@@ -102,7 +102,7 @@ export default function AdminDeliveryPartners() {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {partners.map((p) => (
             <div
-              key={p._id}
+              key={p.id}
               className="bg-white border border-app-border rounded-2xl overflow-hidden hover:border-app-cream-darker hover:shadow-[0_2px_12px_rgba(26,46,26,0.06)] transition-all"
             >
               {/* Card header */}
@@ -146,7 +146,7 @@ export default function AdminDeliveryPartners() {
               {/* Toggle button */}
               <div className="px-4 pb-4">
                 <button
-                  onClick={() => toggleActive(p._id, p.isActive)}
+                  onClick={() => toggleActive(p.id, p.isActive)}
                   className={`w-full py-2 text-[12.5px] font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-colors
                     ${p.isActive
                       ? "bg-red-50 text-app-error hover:bg-red-100 border border-red-200"
