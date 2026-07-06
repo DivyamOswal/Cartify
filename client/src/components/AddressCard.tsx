@@ -1,3 +1,6 @@
+import toast from 'react-hot-toast'
+import api from '../config/api'
+import { useAuth } from '../context/AuthContext'
 import type { Address } from '../types'
 import { CheckIcon, MapPinIcon, PencilIcon, Trash2Icon } from 'lucide-react'
 
@@ -9,8 +12,19 @@ interface AddressCardProps {
 
 const AddressCard = ({ addr, onEditHandler, setAddresses }: AddressCardProps) => {
 
+  const {updateUser} = useAuth()
+
   const handleDelete = async (id: string) => {
-    console.log(id)
+    try {
+      const cofirm = window.confirm("Are you sure you want to delete this address")
+      if(!cofirm) return
+      const {data} = await api.delete(`/addresses/${id}`)
+      setAddresses(data.addresses)
+      updateUser({addresses: data.addresses})
+      toast.success('Address removied')
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || error?.message)
+    }
   }
 
   return (

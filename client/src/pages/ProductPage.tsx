@@ -1,6 +1,5 @@
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
-import { dummyProducts } from "../assets/assets"
 import Loading from "../components/Loading"
 import {
   ArrowLeftIcon,
@@ -17,6 +16,7 @@ import {
 import type { Product } from "../types"
 import ProductCard from "../components/ProductCard"
 import { useCart } from "../context/CardContext"
+import api from "../config/api"
 
 const TABS = ["Description", "Nutrition", "Reviews"] as const
 type Tab = typeof TABS[number]
@@ -36,16 +36,13 @@ const ProductPage = () => {
   useEffect(() => {
     setLoading(true)
     setLocalQuantity(1)
-    setActiveTab("Description")
     window.scrollTo(0, 0)
-    const found = dummyProducts.find((p) => p.id === id)
-    setProduct(found ?? null)
-    setRelatedProducts(
-      dummyProducts
-        .filter((p) => p.id !== id && p.category === found?.category)
-        .slice(0, 4)
-    )
-    setLoading(false)
+    api.get(`/products/${id}`).then(({data})=>{
+      setProduct(data.product)
+      return api.get(`/products?category=${data.product.category}`)
+    }).then(({data})=>{
+      setRelatedProducts(data.products.filter((p: Product)=> p.id !== id))
+    }).catch(()=> navigate("/products")).finally(()=> setLoading(false))
   }, [id])
 
   if (loading) return <Loading />

@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react"
 import type { Product } from "../types"
 import { Link, useSearchParams } from "react-router-dom"
-import { dummyProducts } from "../assets/assets"
 import { HomeIcon, SearchIcon, SearchXIcon } from "lucide-react"
 import Loading from "../components/Loading"
 import ProductCard from "../components/ProductCard"
 import api from "../config/api"
-import { error } from "console"
 import toast from "react-hot-toast"
 
 const SearchResults = () => {
