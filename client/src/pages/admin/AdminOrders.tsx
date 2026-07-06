@@ -3,7 +3,8 @@ import { TruckIcon, UserCheckIcon, XIcon } from "lucide-react"
 import toast from "react-hot-toast"
 import type { DeliveryPartner } from "../../assets/types"
 import Loading from "../../components/Loading"
-import { dummyDashboardOrdersData, dummyDeliveryPartnerData } from "../../assets/assets"
+import { dummyDeliveryPartnerData } from "../../assets/assets"
+import api from "../../config/api"
 
 const statusOptions = [
   "Placed", "Confirmed", "Assigned", "Packed",
@@ -28,14 +29,40 @@ export default function AdminOrders() {
   const [assignModal, setAssignModal] = useState<string | null>(null)
   const [selectedPartner, setSelectedPartner] = useState("")
 
+  const fetchOrders = async () => {
+  try {
+    const { data } = await api.get("/orders/all");
+    setOrders(data.orders);
+  } catch (error: any) {
+    toast.error(error.response?.data?.message || "Failed to load orders")
+  }finally{
+    setLoading(false)
+  }
+}
+
+  const fetchPartners = async () => {
+    try {
+      const {data} = await api.get("/admin/delivery-partners")
+      setPartners(data.partners.filter((p: DeliveryPartner)=>p.isActive))
+    } catch  {
+      
+    }
+  }
+
   useEffect(() => {
-    setOrders(dummyDashboardOrdersData)
-    setPartners(dummyDeliveryPartnerData as any)
+    fetchOrders()
+    fetchPartners()
     setTimeout(() => setLoading(false), 1000)
   }, [])
 
   const handleStatusChange = async (id: string, newStatus: string) => {
-    console.log(id, newStatus)
+    try {
+      await api.put(`/orders/${id}/status`, {status: newStatus})
+      toast.success("Order status updated")
+      fetchOrders()
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to update status")
+    }
   }
 
   const handleAssign = async () => {

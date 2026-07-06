@@ -138,6 +138,7 @@ export const getAllOrders = async (req:Request, res: Response)=>{
         },
         orderBy: {createdAt: "desc"}
     })
+    res.json({orders})
 }
 
 // Get Order Location  GET ( /api/orders/:id/location )
