@@ -67,7 +67,7 @@ const AddressCard = ({ addr, onEditHandler, setAddresses }: AddressCardProps) =>
         </div>
       </div>
 
-      {/* Right — actions */}
+      {/* Right - actions */}
       <div className="flex items-center gap-1 shrink-0">
         <button
           onClick={() => onEditHandler(addr)}

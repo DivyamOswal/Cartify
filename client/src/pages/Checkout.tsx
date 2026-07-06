@@ -166,7 +166,7 @@ const Checkout = () => {
           })}
         </div>
 
-        {/* ✅ Fixed grid — was md-grid-cols-3 and md-cols-span-2 */}
+        {/* ✅ Fixed grid - was md-grid-cols-3 and md-cols-span-2 */}
         <div className="grid md:grid-cols-3 gap-6">
 
           {/* Main form */}

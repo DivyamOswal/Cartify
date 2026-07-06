@@ -10,7 +10,7 @@ export default function DeliveryLayout() {
 
   useEffect(() => {
     setPartner(dummyDeliveryPartnerData[0] as DeliveryPartner)
-  }, [])  // ✅ removed navigate from deps — it never changes
+  }, [])  // ✅ removed navigate from deps - it never changes
 
   const handleLogout = () => navigate("/delivery/login")
 

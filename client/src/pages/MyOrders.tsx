@@ -119,7 +119,7 @@ const MyOrders = () => {
                 to={`/orders/${order.id}`}
                 className="flex flex-col bg-white border border-app-border rounded-2xl p-5 hover:border-app-cream-darker hover:shadow-[0_2px_12px_rgba(26,46,26,0.06)] transition-all"
               >
-                {/* Top row — order ID, date, status */}
+                {/* Top row - order ID, date, status */}
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <p className="text-[13px] font-bold text-app-text">
@@ -171,7 +171,7 @@ const MyOrders = () => {
                   )}
                 </div>
 
-                {/* Bottom row — items count + total */}
+                {/* Bottom row - items count + total */}
                 <div className="flex items-center justify-between pt-3 border-t border-app-border">
                   <span className="text-[12.5px] text-app-text-muted">
                     {order.items.length} item{order.items.length !== 1 ? "s" : ""}

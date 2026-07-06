@@ -4,20 +4,39 @@ import { EditIcon, LeafIcon, PackageIcon, PlusIcon, XIcon } from "lucide-react"
 import type { Product } from "../../assets/types"
 import Loading from "../../components/Loading"
 import { dummyProducts } from "../../assets/assets"
+import api from "../../config/api"
+import toast from "react-hot-toast"
 
 export default function AdminProducts() {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "₹"
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
 
+
+  const fetchProducts = async ()=>{
+    try {
+      const {data} = await api.get("/products")
+      setProducts(data.products)
+    } catch (error:any) {
+      toast.error(error.response?.data?.message || error?.message)
+    }finally{
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
-    setProducts(dummyProducts)
-    setTimeout(() => setLoading(false), 1000)
+    fetchProducts()
   }, [])
 
   const handleMarkOutOfStock = async (id: string, name: string) => {
     if (!window.confirm(`Mark "${name}" as out of stock?`)) return
-    console.log(id)
+    try {
+      await api.delete(`/products/${id}`)
+      toast.success("Product marked as out of stock")
+      fetchProducts()
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to update product")
+    }
   }
 
   if (loading) return <Loading />

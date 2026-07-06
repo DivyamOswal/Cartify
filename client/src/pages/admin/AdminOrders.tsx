@@ -3,7 +3,6 @@ import { TruckIcon, UserCheckIcon, XIcon } from "lucide-react"
 import toast from "react-hot-toast"
 import type { DeliveryPartner } from "../../assets/types"
 import Loading from "../../components/Loading"
-import { dummyDeliveryPartnerData } from "../../assets/assets"
 import api from "../../config/api"
 
 const statusOptions = [
@@ -67,9 +66,16 @@ export default function AdminOrders() {
 
   const handleAssign = async () => {
     if (!assignModal || !selectedPartner) return
-    toast.success("Delivery partner assigned!")
-    setAssignModal(null)
-    setSelectedPartner("")
+    try {
+      await api.put(`/admin/orders/${assignModal}/assign`,
+      {partnerId: selectedPartner})
+      toast.success("Delivery partner assigned")
+      setAssignModal(null)
+      setSelectedPartner("")
+      fetchOrders()
+    } catch (error: any) {
+      toast.error(error?.reponse?.data?.message || "Failed")
+    }
   }
 
   if (loading) return <Loading />
@@ -145,7 +151,7 @@ export default function AdminOrders() {
                               {order.user?.name || "Unknown"}
                             </p>
                             <p className="text-[11px] text-app-text-faint">
-                              {order.user?.email || "—"}
+                              {order.user?.email || "-"}
                             </p>
                           </div>
                         </div>

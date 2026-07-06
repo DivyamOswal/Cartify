@@ -114,7 +114,7 @@ const OrderTracking = () => {
 
         <div className="grid lg:grid-cols-3 gap-5">
 
-          {/* LEFT — Timeline + Map + Delivery partner */}
+          {/* LEFT - Timeline + Map + Delivery partner */}
           <div className="lg:col-span-2 space-y-5">
 
             {/* OTP card */}
@@ -159,7 +159,7 @@ const OrderTracking = () => {
             )}
           </div>
 
-          {/* RIGHT — Address + Items + Summary */}
+          {/* RIGHT - Address + Items + Summary */}
           <div className="space-y-4">
 
             {/* Delivery address */}

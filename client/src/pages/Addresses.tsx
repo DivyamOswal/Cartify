@@ -173,7 +173,7 @@ const Addresses = () => {
         ) : (
           <div className="space-y-6">
 
-            {/* Default address — highlighted section */}
+            {/* Default address - highlighted section */}
             {defaultAddress && (
               <div>
                 <p className="text-[10.5px] font-bold text-app-text-light uppercase tracking-widest mb-3">

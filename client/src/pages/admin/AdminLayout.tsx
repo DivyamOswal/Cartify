@@ -30,7 +30,7 @@ export default function AdminLayout() {
   return (
     <div className="h-screen overflow-hidden flex flex-col">
 
-      {/* Navbar — hidden on mobile */}
+      {/* Navbar - hidden on mobile */}
       <div className="max-lg:hidden shrink-0">
         <Navbar />
       </div>
@@ -80,7 +80,7 @@ export default function AdminLayout() {
               ))}
             </nav>
 
-            {/* Exit — separated at bottom */}
+            {/* Exit - separated at bottom */}
             <div className="p-2 border-t border-app-border">
               <NavLink
                 to="/"

@@ -176,7 +176,7 @@ export default function AdminDashboard() {
                         </div>
                         <div>
                           <p className="text-[13px] font-semibold text-app-text leading-tight">
-                            {order.user?.name || "—"}
+                            {order.user?.name || "-"}
                           </p>
                           <p className="text-[11px] text-app-text-faint">
                             {order.user?.email || ""}

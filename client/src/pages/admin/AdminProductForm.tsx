@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react"
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, useNavigate } from "react-router-dom"
 import { ArrowLeftIcon, ImageIcon, Loader2Icon, PackageIcon } from "lucide-react"
 import { categoriesData, dummyProducts } from "../../assets/assets"
 import Loading from "../../components/Loading"
+import api from "../../config/api"
+import toast from "react-hot-toast"
 
 const inputClass = "w-full px-4 py-[10px] text-[13.5px] bg-app-cream border-[1.5px] border-app-cream-darker rounded-xl focus:border-app-green-light focus:bg-white text-app-text placeholder:text-app-text-faint outline-none transition-all"
 const labelClass = "block text-[11px] font-bold text-app-text-light uppercase tracking-widest mb-1.5"
@@ -10,6 +12,7 @@ const labelClass = "block text-[11px] font-bold text-app-text-light uppercase tr
 export default function AdminProductForm() {
   const { id } = useParams()
   const isEdit = Boolean(id)
+  const navigate = useNavigate()
 
   const [loading, setLoading] = useState(isEdit)
   const [saving, setSaving] = useState(false)
@@ -28,15 +31,69 @@ export default function AdminProductForm() {
   })
 
   useEffect(() => {
-    if (isEdit) {
-      const found = dummyProducts.find((p) => p.id === id)
-      if (found) setFormData(found as any)
+    const fetchData = async ()=>{
+      try {
+        if (isEdit) {
+        const {data: prodData} = await api.get(`/products/${id}`)
+        const p = prodData.product
+        setFormData({
+          name: p.name,
+          description: p.description,
+          price: p.price.toString(),
+          originalPrice: p.originalPrice? p.originalPrice.toString(): "",
+          image: p.image,
+          category: p.category,
+          unit: p.unit,
+          stock: p.stock.toString(),
+          isOrganic: p.isOrganic
+        })
     }
-    setLoading(false)
+      } catch (error:any) {
+        toast.error(error.response?.data?.message || "Failed to load data")
+      }finally{
+        setLoading(false)
+      }
+    }
+    fetchData()
   }, [id, isEdit])
 
-  const handleSubmit = async (e: React.FormEvent) => { // ✅ FormEvent not SubmitEvent
+  const handleSubmit = async (e: React.SubmitEvent) => { 
     e.preventDefault()
+    setSaving()
+    try {
+      let finalImageUrl = formData.image
+
+      if(imageFile){
+        const formDataUpload = new FormData()
+        formDataUpload.append("image", imageFile)
+        const {data} = await api.post("/upload", formDataUpload)
+        finalImageUrl = data.url
+      }
+      if(!finalImageUrl){
+        toast.error("Please upload a product image")
+        setSaving(false)
+        return
+      }
+
+      const payload = {
+        ...formData,
+        image: finalImageUrl,
+        price: Number(formData.price),
+        originalPrice: formData.originalPrice ? Number (formData.originalPrice) : 0,
+        stock: Number(formData.stock)
+      }
+      if(isEdit){
+        await api.put(`/products/${id}`, payload)
+        toast.success("Product updated successfully")
+      }else{
+        await api.post("/products", payload)
+        toast.success("Product created successfully")
+      }navigate('/admin/products')
+    } catch (error:any) {
+      toast.error(error.response?.data?.message || "Failed to save product")
+    }finally{
+      setSaving(false)
+    }
   }
 
   const set = (key: string, value: any) =>
@@ -161,7 +218,7 @@ export default function AdminProductForm() {
                 <label className={labelClass}>
                   Original Price (₹)
                   <span className="ml-1.5 text-[9px] font-medium text-app-text-faint normal-case tracking-normal">
-                    optional — for discount display
+                    optional - for discount display
                   </span>
                 </label>
                 <input
@@ -209,7 +266,7 @@ export default function AdminProductForm() {
               <textarea
                 required
                 rows={4}
-                placeholder="Describe the product — freshness, origin, usage tips…"
+                placeholder="Describe the product - freshness, origin, usage tips…"
                 value={formData.description}
                 onChange={(e) => set("description", e.target.value)}
                 className={`${inputClass} resize-none`}

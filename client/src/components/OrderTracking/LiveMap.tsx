@@ -135,7 +135,7 @@ export default function LiveMap({
         )}
       </div>
 
-      {/* Footer — address */}
+      {/* Footer - address */}
       {hasDestination && (
         <div className="flex items-center gap-2.5 px-4 py-3 border-t border-app-border bg-app-cream/50">
           <MapPinIcon className="size-3.5 text-app-green-accent shrink-0" strokeWidth={1.75} />

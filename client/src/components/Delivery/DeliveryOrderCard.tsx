@@ -113,7 +113,7 @@ export default function DeliveryOrderCard({
 
       </div>
 
-      {/* Actions — active orders */}
+      {/* Actions - active orders */}
       {tab === "active" && (
         <div className="px-5 py-3.5 border-t border-app-border bg-app-cream/30 flex flex-wrap gap-2">
 
@@ -128,7 +128,7 @@ export default function DeliveryOrderCard({
             </button>
           )}
 
-          {/* Deliver — OTP */}
+          {/* Deliver - OTP */}
           {order.status === "Out for Delivery" && (
             <button
               onClick={() => setOtpModal(order.id)}
@@ -151,7 +151,7 @@ export default function DeliveryOrderCard({
         </div>
       )}
 
-      {/* Footer — completed orders */}
+      {/* Footer - completed orders */}
       {tab === "completed" && (
         <div className="px-5 py-3 border-t border-app-border flex items-center justify-between">
           <p className="text-[11.5px] text-app-text-faint flex items-center gap-1.5">

@@ -14,7 +14,7 @@ export default function DeliveryLogin() {
   return (
     <div className="min-h-screen flex">
 
-      {/* Left Panel — dark green matching Login */}
+      {/* Left Panel - dark green matching Login */}
       <div className="hidden lg:flex lg:w-1/2 bg-app-green relative flex-col justify-end p-10 overflow-hidden">
 
         {/* Leaf blobs */}

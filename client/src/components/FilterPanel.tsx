@@ -95,7 +95,7 @@ const FilterPanel = ({
             </div>
           </div>
 
-          <span className="text-app-text-faint text-[12px] mt-4 shrink-0">—</span>
+          <span className="text-app-text-faint text-[12px] mt-4 shrink-0">-</span>
 
           <div className="flex-1">
             <label className="text-[10px] text-app-text-faint font-medium mb-1 block">Max</label>
@@ -117,7 +117,7 @@ const FilterPanel = ({
           </div>
         </div>
 
-        {/* Quick presets — atomic update */}
+        {/* Quick presets - atomic update */}
         <div className="flex flex-wrap gap-1.5">
           {pricePresets.map((preset) => {
             const isActive =
