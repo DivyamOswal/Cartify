@@ -59,7 +59,7 @@ export default function AdminProductForm() {
 
   const handleSubmit = async (e: React.SubmitEvent) => { 
     e.preventDefault()
-    setSaving()
+    setSaving(true)
     try {
       let finalImageUrl = formData.image
 

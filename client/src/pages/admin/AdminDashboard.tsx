@@ -84,7 +84,7 @@ export default function AdminDashboard() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {stats && statCards(stats, currency).map((card) => (
+        {stats && statCards(stats).map((card) => (
           <div
             key={card.label}
             className="bg-white border border-app-border rounded-2xl p-5 flex flex-col gap-3 hover:border-app-cream-darker hover:shadow-[0_2px_12px_rgba(26,46,26,0.06)] transition-all"
