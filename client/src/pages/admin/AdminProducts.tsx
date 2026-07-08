@@ -3,7 +3,6 @@ import { Link } from "react-router-dom"
 import { EditIcon, LeafIcon, PackageIcon, PlusIcon, XIcon } from "lucide-react"
 import type { Product } from "../../assets/types"
 import Loading from "../../components/Loading"
-import { dummyProducts } from "../../assets/assets"
 import api from "../../config/api"
 import toast from "react-hot-toast"
 

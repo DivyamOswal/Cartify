@@ -3,11 +3,12 @@ import api from '../config/api'
 import { useAuth } from '../context/AuthContext'
 import type { Address } from '../types'
 import { CheckIcon, MapPinIcon, PencilIcon, Trash2Icon } from 'lucide-react'
+import type { Dispatch, SetStateAction } from 'react'
 
 interface AddressCardProps {
   addr: Address
   onEditHandler: (addr: Address) => void
-  setAddresses: (addresses: Address) => void
+  setAddresses: Dispatch<SetStateAction<Address[]>>
 }
 
 const AddressCard = ({ addr, onEditHandler, setAddresses }: AddressCardProps) => {

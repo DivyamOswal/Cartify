@@ -20,7 +20,7 @@ interface Stats {
   recentOrders: any[]
 }
 
-const statCards = (stats: Stats, currency: string) => [
+const statCards = (stats: Stats) => [
   {
     label: "Total Orders",
     value: stats.totalOrders,
