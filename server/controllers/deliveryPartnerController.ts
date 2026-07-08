@@ -36,21 +36,40 @@ export const loginPartner = async (req: Request, res: Response)=>{
 }
 
 // Get assigned deliveries GET ( /api/delivery/my-deliveries )
-export const getMyDeliveries = async (req: Request, res: Response)=>{
-    const {status} = req.body
-    const where: any = {deliveryPartnerId: req.partner!.id}
+export const getMyDeliveries = async (req: Request, res: Response) => {
+    const status = req.query.status as string;
 
-    if(status === "active"){
-        where.status = {in : ["Assigned", "Packed", "Out for Delivery"]}
-    }else if(status === "completed"){
-        where.status = {in: ["Delivered", "Cancelled"]}
+    const where: any = {
+        deliveryPartnerId: req.partner!.id
+    };
+
+    if (status === "active") {
+        where.status = {
+            in: ["Assigned", "Packed", "Out for Delivery"]
+        };
+    } else if (status === "completed") {
+        where.status = {
+            in: ["Delivered", "Cancelled"]
+        };
     }
 
     const orders = await prisma.order.findMany({
-        where, include: {user: {select: {name: true, email: true, phone: true}}},
-        orderBy: {createdAt: "desc"}
-    })
-    res.json({orders})
+        where,
+        include: {
+            user: {
+                select: {
+                    name: true,
+                    email: true,
+                    phone: true
+                }
+            }
+        },
+        orderBy: {
+            createdAt: "desc"
+        }
+    });
+
+    res.json({ orders });
 }
 
 // Get single delivery detail GET ( /api/delivery/my-deliveries/:id )

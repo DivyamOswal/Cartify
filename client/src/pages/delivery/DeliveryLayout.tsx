@@ -1,19 +1,28 @@
 import { Outlet, useNavigate } from "react-router-dom"
-import { LogOutIcon, ShoppingBag, TruckIcon } from "lucide-react"
+import { LogOutIcon, ShoppingBag } from "lucide-react"
 import { useEffect, useState } from "react"
 import type { DeliveryPartner } from "../../types"
-import { dummyDeliveryPartnerData } from "../../assets/assets"
 
 export default function DeliveryLayout() {
   const navigate = useNavigate()
   const [partner, setPartner] = useState<DeliveryPartner | null>(null)
 
   useEffect(() => {
-    setPartner(dummyDeliveryPartnerData[0] as DeliveryPartner)
-  }, [])  // ✅ removed navigate from deps - it never changes
+    const saved = localStorage.getItem("delivery_partner")
+    const token = localStorage.getItem("delivery_token")
+    if(!saved || !token){
+      navigate('/delivery/login')
+      return
+    }
+    setPartner(JSON.parse(saved))
+  }, []) 
 
-  const handleLogout = () => navigate("/delivery/login")
-
+  const handleLogout = () => {
+    localStorage.removeItem("delivery_partner")
+    localStorage.removeItem("delivery_token")
+    setPartner(null)
+    navigate("/delivery/login")
+  }
   if (!partner) return null
 
   return (

@@ -131,7 +131,9 @@ export default function DeliveryOrderCard({
           {/* Deliver - OTP */}
           {order.status === "Out for Delivery" && (
             <button
-              onClick={() => setOtpModal(order.id)}
+              onClick={() => {
+              setOtpModal(order.id);
+}}
               className="flex items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-semibold bg-green-600 hover:bg-green-700 text-white rounded-xl transition-colors active:scale-[0.98]"
             >
               <CheckCircleIcon className="size-3.5" strokeWidth={2} />

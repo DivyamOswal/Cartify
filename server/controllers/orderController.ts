@@ -3,8 +3,8 @@ import { prisma } from "../config/db.js";
 import { inngest } from "../inngest/index.js";
 
 // Create Orders  POST ( /api/orders )
-export const createOrder = async (req:Request, res: Response)=>{
-    const {items, shippingAddress, paymentMethod} = req.body
+export const createOrder = async (req: Request, res: Response) => {
+    const { items, shippingAddress, paymentMethod } = req.body;
 
     // Check if order items are empty
     if(!items || items.length === 0){
@@ -37,19 +37,25 @@ export const createOrder = async (req:Request, res: Response)=>{
     const tax = Math.round(subtotal * 0.08 * 100) / 100
     const total = Math.round((subtotal + deliveryFee + tax) * 100) / 100
 
-    const order = await prisma.order.create({
-        data : {
-            userId: req.user!.id,
-            items: orderItems,
-            shippingAddress,
-            paymentMethod,
-            subtotal,
-            deliveryFee,
-            tax,
-            total,
-            statusHistory: [{status: "Placed", note: "Order placed successfully", timestamp: new Date()}]
-        }
-    })
+   const order = await prisma.order.create({
+    data: {
+        userId: req.user!.id,
+        items: orderItems,
+        shippingAddress,
+        paymentMethod,
+        subtotal,
+        deliveryFee,
+        tax,
+        total,
+        statusHistory: [
+            {
+                status: "Placed",
+                note: "Order placed successfully",
+                timestamp: new Date(),
+            },
+        ],
+    },
+});
     if(paymentMethod === "card"){
         // stripe payement link
 
@@ -78,9 +84,8 @@ export const getUserOrders = async (req:Request, res: Response)=>{
     const {status} = req.query
 
     const where: any = {
-        userId: req.user!.id,
-        NOT: [{paymentMethod: 'card', isPaid: false}]
-    }
+    userId: req.user!.id
+}
 
     if(status && status !== "all"){
         where.status = status
@@ -129,17 +134,16 @@ export const updateOrderStatus = async (req: Request, res:Response)=>{
 }
 
 // Get all orders (admin)  GET ( /api/orders/all )
-export const getAllOrders = async (req:Request, res: Response)=>{
-    const orders = await prisma.order.findMany({
-        where: {NOT: [{paymentMethod: "card", isPaid: false}]},
-        include: {
-            user: {select: {name: true, email:true}},
-            deliveryPartner: { select: {name: true, phone: true, email: true}}
-        },
-        orderBy: {createdAt: "desc"}
-    })
-    res.json({orders})
-}
+export const getAllOrders = async (req: Request, res: Response) => {
+  const orders = await prisma.order.findMany({
+    include: {
+        user: { select: { name: true, email: true } },
+        deliveryPartner: { select: { name: true, phone: true, email: true } }
+    },
+    orderBy: { createdAt: "desc" }
+})
+  res.json({ orders });
+};
 
 // Get Order Location  GET ( /api/orders/:id/location )
 export const getOrderLocation = async(req: Request, res:Response)=>{
