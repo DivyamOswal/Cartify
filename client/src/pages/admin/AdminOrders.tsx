@@ -129,7 +129,7 @@ export default function AdminOrders() {
                       {/* Order ID + date */}
                       <td className="px-5 py-3.5">
                         <p className="text-[12.5px] font-bold font-mono text-app-text-muted tracking-wide">
-                          #{order.id.slice(-6).toUpperCase()}
+                          #{String(order.id ?? "").slice(-6).toUpperCase()}
                         </p>
                         <p className="text-[11px] text-app-text-faint mt-0.5">
                           {new Date(order.createdAt).toLocaleDateString("en-IN", {

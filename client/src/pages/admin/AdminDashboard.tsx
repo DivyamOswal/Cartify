@@ -162,7 +162,7 @@ export default function AdminDashboard() {
                     {/* Order ID */}
                     <td className="px-5 py-3.5">
                       <span className="text-[12px] font-bold font-mono text-app-text-muted tracking-wide">
-                        #{order.id.slice(-6).toUpperCase()}
+                        #{(order.id || order._id || "").slice(-6).toUpperCase()}
                       </span>
                     </td>
 

@@ -1,6 +1,6 @@
 import { TruckIcon, LeafIcon, ClockIcon, ShieldCheckIcon, MapPinIcon, PhoneIcon, MailIcon } from "lucide-react";
 import { SiFacebook, SiX, SiInstagram } from "@icons-pack/react-simple-icons";
-import hero_bg from "./hero_bg.jpeg";
+import hero_bg from "./hero_bg.webp";
 import delivery_truck from "./delivery_truck.svg";
 import fruits_vegetables from "./fruits_vegetables.png";
 import dairy_eggs from "./dairy_eggs.png";
